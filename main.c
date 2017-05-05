@@ -86,37 +86,55 @@ int main(int argc, char *argv[])
 			SDL_SetRenderDrawColor(gRenderer, 0x31, 0x5D, 0x5F, 0xFF);
 			SDL_RenderClear(gRenderer);
 
-			/* draw horizontal lines */
+			/* draw left/right lines */
 			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-		        x1 = LINE_LENGTH;
+		        x1 = SCREEN_WIDTH / 2;
 			y1 = LINE_LENGTH;
-			for (i = 0; i < 8; i++)
+			for (i = 0; i <= 8; i++)
 			{
 				for (j = 0; j < 7; j++)
 				{
 					x2 = x1 + LINE_LENGTH;
-					y2 = y1;
+					y2 = y1 + LINE_LENGTH;
 					SDL_RenderDrawLine(gRenderer, x1, y1, x2, y2);
 					x1 = x2;
+					y1 = y2;
 				}
-				x1 = LINE_LENGTH;
-				y1 = y1 + LINE_LENGTH;
+				if (i == 0)
+				{
+					x1 = (SCREEN_WIDTH / 2) - LINE_LENGTH;
+					y1 = LINE_LENGTH * 2;
+				}
+				else
+				{
+					x1 = (SCREEN_WIDTH / 2) - LINE_LENGTH * i;
+					y1 = LINE_LENGTH * (i + 1);
+				}
 			}
 
-			/* draw vertical lines */
-		        x1 = LINE_LENGTH;
+			/* draw right/left lines */
+		        x1 = SCREEN_WIDTH / 2;
 			y1 = LINE_LENGTH;
-			for (i = 0; i < 8; i++)
+			for (i = 0; i <= 8; i++)
 			{
 				for (j = 0; j < 7; j++)
 				{
-					x2 = x1;
+					x2 = x1 - LINE_LENGTH;
 					y2 = y1 + LINE_LENGTH;
 					SDL_RenderDrawLine(gRenderer, x1, y1, x2, y2);
+					x1 = x2;
 					y1 = y2;
 				}
-				y1 = LINE_LENGTH;
-				x1 = x1 + LINE_LENGTH;
+				if (i == 0)
+				{
+					x1 = (SCREEN_WIDTH / 2) + LINE_LENGTH;
+					y1 = LINE_LENGTH * 2;
+				}
+				else
+				{
+					x1 = (SCREEN_WIDTH / 2) + LINE_LENGTH * i;
+					y1 = LINE_LENGTH * (i + 1);
+				}
 			}
 
 			/* update screen */
