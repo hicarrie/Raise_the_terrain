@@ -57,10 +57,8 @@ bool init()
 
 int main(int argc, char *argv[])
 {
-	unsigned int x1, y1, x2, y2;
+	unsigned int x1, y1, x2, y2, ix1, iy1, ix2, iy2;
 	unsigned int i, j;
-	char x = x;
-	char y = y;
 
 	/* start SDL and create window */
 	if (!init())
@@ -88,63 +86,45 @@ int main(int argc, char *argv[])
 			SDL_SetRenderDrawColor(gRenderer, 0x31, 0x5D, 0x5F, 0xFF);
 			SDL_RenderClear(gRenderer);
 
-			/* draw left/right lines */
+			/* draw / lines */
 			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 		        x1 = SCREEN_WIDTH / 2;
-			y1 = LINE_LENGTH;
-			for (i = 0; i <= 8; i++)
+			y1 = 0;
+			for (i = 0; i < 8; i++)
 			{
 				for (j = 0; j < 7; j++)
 				{
-					x1 = inclination(x1, y1, x);
-					y1 = inclination(x1, y1, y);
+					ix1 = x1 - y1;
+					iy1 = INCLINE * x1 + INCLINE * y1;
 					x2 = x1 + LINE_LENGTH;
-					y2 = y1 + LINE_LENGTH;
-					x2 = inclination(x2, y2, x);
-					y2 = inclination(x2, y2, y);
-					SDL_RenderDrawLine(gRenderer, x1, y1, x2, y2);
+					y2 = y1;
+					ix2 = x2 - y2;
+					iy2 = INCLINE * x2 + INCLINE * y2;
+					SDL_RenderDrawLine(gRenderer, ix1, iy1, ix2, iy2);
 					x1 = x2;
-					y1 = y2;
 				}
-				if (i == 0)
-				{
-					x1 = (SCREEN_WIDTH / 2) - LINE_LENGTH;
-					y1 = LINE_LENGTH * 2;
-				}
-				else
-				{
-					x1 = (SCREEN_WIDTH / 2) - LINE_LENGTH * i;
-					y1 = LINE_LENGTH * (i + 1);
-				}
+				x1 = SCREEN_WIDTH / 2;
+				y1 = y1 + LINE_LENGTH;
 			}
 
-			/* draw right/left lines */
+			/* draw \ lines */
 		        x1 = SCREEN_WIDTH / 2;
-			y1 = LINE_LENGTH;
-			for (i = 0; i <= 8; i++)
+			y1 = 0;
+			for (i = 0; i < 8; i++)
 			{
 				for (j = 0; j < 7; j++)
 				{
-					x1 = inclination(x1, y1, x);
-					y1 = inclination(x1, y1, y);
-					x2 = x1 - LINE_LENGTH;
+					ix1 = x1 - y1;
+					iy1 = INCLINE * x1 + INCLINE * y1;
+					x2 = x1;
 					y2 = y1 + LINE_LENGTH;
-					x2 = inclination(x2, y2, x);
-					y2 = inclination(x2, y2, y);
-					SDL_RenderDrawLine(gRenderer, x1, y1, x2, y2);
-					x1 = x2;
+					ix2 = x2 - y2;
+					iy2 = INCLINE * x2 + INCLINE * y2;
+					SDL_RenderDrawLine(gRenderer, ix1, iy1, ix2, iy2);
 					y1 = y2;
 				}
-				if (i == 0)
-				{
-					x1 = (SCREEN_WIDTH / 2) + LINE_LENGTH;
-					y1 = LINE_LENGTH * 2;
-				}
-				else
-				{
-					x1 = (SCREEN_WIDTH / 2) + LINE_LENGTH * i;
-					y1 = LINE_LENGTH * (i + 1);
-				}
+				y1 = 0;
+				x1 = x1 + LINE_LENGTH;
 			}
 
 			/* update screen */

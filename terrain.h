@@ -6,8 +6,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define LINE_LENGTH 20
-#define LINE_MAX 160
+#define LINE_LENGTH 40
+#define INCLINE .4
 
 bool init();
 void closeSDL(SDL_Window *window, SDL_Renderer *renderer);
