@@ -80,6 +80,10 @@ int main(int argc, char *argv[])
 				/* user requests quit */
 				if (e.type == SDL_QUIT)
 					quit = true;
+
+				if (e.type == SDL_KEYDOWN && e.key.keysym.sym
+				    == SDLK_ESCAPE)
+					quit = true;
 			}
 
 			/* clear screen */
