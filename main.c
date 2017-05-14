@@ -1,15 +1,15 @@
 #include "terrain.h"
 
-/* screen dimensions */
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-
 /* render window (global) */
 SDL_Window *gWindow = NULL;
 
 /* window renderer */
 SDL_Renderer *gRenderer = NULL;
 
+/**
+ * init - initializes SDL, window, and renderer
+ * Return: true on success, false on failure
+ */
 bool init()
 {
 	/* initialization flag */
@@ -55,10 +55,19 @@ bool init()
 	return success;
 }
 
+/**
+ * main - main function for program
+ * @argc: number of arguments passed
+ * @argv: pointer to array of arguments
+ * Return: 0 on success
+ */
 int main(int argc, char *argv[])
 {
-	unsigned int x1, y1, x2, y2, ix1, iy1, ix2, iy2;
-	unsigned int i, j;
+	int i;
+	SDL_Point **rows;
+
+	/* generate points for drawing rows of grid */
+	rows = generate_rows();
 
 	/* start SDL and create window */
 	if (!init())
@@ -80,51 +89,10 @@ int main(int argc, char *argv[])
 				/* user requests quit */
 				if (e.type == SDL_QUIT)
 					quit = true;
-			}
 
-			/* clear screen */
-			SDL_SetRenderDrawColor(gRenderer, 0x31, 0x5D, 0x5F, 0xFF);
-			SDL_RenderClear(gRenderer);
-
-			/* draw / lines */
-			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-		        x1 = SCREEN_WIDTH / 2;
-			y1 = 0;
-			for (i = 0; i < 8; i++)
-			{
-				for (j = 0; j < 7; j++)
-				{
-					ix1 = x1 - y1;
-					iy1 = INCLINE * x1 + INCLINE * y1;
-					x2 = x1 + LINE_LENGTH;
-					y2 = y1;
-					ix2 = x2 - y2;
-					iy2 = INCLINE * x2 + INCLINE * y2;
-					SDL_RenderDrawLine(gRenderer, ix1, iy1, ix2, iy2);
-					x1 = x2;
-				}
-				x1 = SCREEN_WIDTH / 2;
-				y1 = y1 + LINE_LENGTH;
-			}
-
-			/* draw \ lines */
-		        x1 = SCREEN_WIDTH / 2;
-			y1 = 0;
-			for (i = 0; i < 8; i++)
-			{
-				for (j = 0; j < 7; j++)
-				{
-					ix1 = x1 - y1;
-					iy1 = INCLINE * x1 + INCLINE * y1;
-					x2 = x1;
-					y2 = y1 + LINE_LENGTH;
-					ix2 = x2 - y2;
-					iy2 = INCLINE * x2 + INCLINE * y2;
-					SDL_RenderDrawLine(gRenderer, ix1, iy1, ix2, iy2);
-					y1 = y2;
-				}
-				y1 = 0;
-				x1 = x1 + LINE_LENGTH;
+				if (e.type == SDL_KEYDOWN && e.key.keysym.sym
+				    == SDLK_ESCAPE)
+					quit = true;
 			}
 
 			/* update screen */

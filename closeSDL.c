@@ -9,6 +9,5 @@ void closeSDL(SDL_Window *gWindow, SDL_Renderer *gRenderer)
 	gWindow = NULL;
 
 	/* quit SDL subsystems */
-	IMG_Quit();
 	SDL_Quit();
 }
