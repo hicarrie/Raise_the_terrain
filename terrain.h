@@ -6,7 +6,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define LINE_LENGTH 40
+/* screen dimensions */
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 960
+#define LINE_LENGTH 80
 #define INCLINE .4
 
 bool init();

@@ -1,9 +1,5 @@
 #include "terrain.h"
 
-/* screen dimensions */
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-
 /* render window (global) */
 SDL_Window *gWindow = NULL;
 
@@ -71,21 +67,6 @@ int main(int argc, char *argv[])
 		/* event handler */
 		SDL_Event e;
 
-		/* while application is running */
-		while (!quit)
-		{
-			/* handle events on queue */
-			while (SDL_PollEvent(&e) != 0)
-			{
-				/* user requests quit */
-				if (e.type == SDL_QUIT)
-					quit = true;
-
-				if (e.type == SDL_KEYDOWN && e.key.keysym.sym
-				    == SDLK_ESCAPE)
-					quit = true;
-			}
-
 			/* clear screen */
 			SDL_SetRenderDrawColor(gRenderer, 0x31, 0x5D, 0x5F, 0xFF);
 			SDL_RenderClear(gRenderer);
@@ -130,6 +111,23 @@ int main(int argc, char *argv[])
 				y1 = 0;
 				x1 = x1 + LINE_LENGTH;
 			}
+
+		/* while application is running */
+		while (!quit)
+		{
+			/* handle events on queue */
+			while (SDL_PollEvent(&e) != 0)
+			{
+				/* user requests quit */
+				if (e.type == SDL_QUIT)
+					quit = true;
+
+				if (e.type == SDL_KEYDOWN && e.key.keysym.sym
+				    == SDLK_ESCAPE)
+					quit = true;
+			}
+
+
 
 			/* update screen */
 			SDL_RenderPresent(gRenderer);
