@@ -1,14 +1,14 @@
 #include "terrain.h"
 
+/**
+ * closeSDL - frees resources and close SDL
+ * @gWindow: SDL window
+ * @gRenderer: renderer
+ * Return: void
+ */
 void closeSDL(SDL_Window *gWindow, SDL_Renderer *gRenderer)
 {
 	unsigned int i;
-
-	/* free rows */
-	/* for (i = 0; i < POINTS; i++)
-	{
-		free(rows[i]);
-		} */
 
 	/* destroy window */
 	SDL_DestroyRenderer(gRenderer);

@@ -3,10 +3,14 @@
 /* render window (global) */
 SDL_Window *gWindow = NULL;
 
-/* window renderer */
+/* window renderer (global) */
 SDL_Renderer *gRenderer = NULL;
 
-bool init()
+/**
+ * init - initializes SDL, window, and renderer
+ * Return: True on success, False on failure
+ */
+bool init(void)
 {
 	/* initialization flag */
 	bool success = true;
@@ -35,26 +39,34 @@ bool init()
 		else
 		{
 			/* create renderer for window */
-			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+			gRenderer = SDL_CreateRenderer(gWindow, -1,
+						       SDL_RENDERER_ACCELERATED);
 			if (gRenderer == NULL)
 			{
-				printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+				printf("Renderer not created! SDL Error: %s\n",
+				       SDL_GetError());
 				success = false;
 			}
 			else
-			{
 				/* initialize renderer color */
-				SDL_SetRenderDrawColor(gRenderer, 0x2D, 0x4C, 0x76, 0xFF);
-			}
+				SDL_SetRenderDrawColor(gRenderer, 0x2D, 0x4C,
+						       0x76, 0xFF);
 		}
 	}
-	return success;
+	return (success);
 }
 
+/**
+ * main - main function for drawing grid
+ * @argc: number of arguments
+ * @argv: pointer to array of arguments
+ * Return: 0 on success
+ */
 int main(int argc, char *argv[])
 {
 	unsigned int x1, y1, x2, y2, ix1, iy1, ix2, iy2;
 	unsigned int i, j;
+	SDL_Event event;
 
 	/* start SDL and create window */
 	if (!init())
@@ -64,16 +76,28 @@ int main(int argc, char *argv[])
 		/* main loop flag */
 		bool quit = false;
 
-		/* event handler */
-		SDL_Event e;
+		while (!quit)
+		{
+			while (SDL_PollEvent(&event) != 0)
+			{
+				/* user requests quit */
+				if (event.type == SDL_QUIT)
+					quit = true;
+
+				if (event.type == SDL_KEYDOWN &&
+				    event.key.keysym.sym == SDLK_ESCAPE)
+					quit = true;
+			}
 
 			/* clear screen */
-			SDL_SetRenderDrawColor(gRenderer, 0x31, 0x5D, 0x5F, 0xFF);
+			SDL_SetRenderDrawColor(gRenderer, 0x31, 0x5D,
+					       0x5F, 0xFF);
 			SDL_RenderClear(gRenderer);
 
-			/* draw / lines */
-			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-		        x1 = SCREEN_WIDTH / 2;
+			/* draw horizontal lines */
+			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF,
+					       0xFF, 0xFF);
+			x1 = SCREEN_WIDTH / 2;
 			y1 = 0;
 			for (i = 0; i < 8; i++)
 			{
@@ -85,15 +109,15 @@ int main(int argc, char *argv[])
 					y2 = y1;
 					ix2 = x2 - y2;
 					iy2 = INCLINE * x2 + INCLINE * y2;
-					SDL_RenderDrawLine(gRenderer, ix1, iy1, ix2, iy2);
+					SDL_RenderDrawLine(gRenderer, ix1, iy1,
+							   ix2, iy2);
 					x1 = x2;
 				}
 				x1 = SCREEN_WIDTH / 2;
 				y1 = y1 + LINE_LENGTH;
 			}
-
-			/* draw \ lines */
-		        x1 = SCREEN_WIDTH / 2;
+			/* draw vertical lines */
+			x1 = SCREEN_WIDTH / 2;
 			y1 = 0;
 			for (i = 0; i < 8; i++)
 			{
@@ -105,35 +129,17 @@ int main(int argc, char *argv[])
 					y2 = y1 + LINE_LENGTH;
 					ix2 = x2 - y2;
 					iy2 = INCLINE * x2 + INCLINE * y2;
-					SDL_RenderDrawLine(gRenderer, ix1, iy1, ix2, iy2);
+					SDL_RenderDrawLine(gRenderer, ix1, iy1,
+							   ix2, iy2);
 					y1 = y2;
 				}
 				y1 = 0;
 				x1 = x1 + LINE_LENGTH;
 			}
-
-		/* while application is running */
-		while (!quit)
-		{
-			/* handle events on queue */
-			while (SDL_PollEvent(&e) != 0)
-			{
-				/* user requests quit */
-				if (e.type == SDL_QUIT)
-					quit = true;
-
-				if (e.type == SDL_KEYDOWN && e.key.keysym.sym
-				    == SDLK_ESCAPE)
-					quit = true;
-			}
-
-
-
 			/* update screen */
 			SDL_RenderPresent(gRenderer);
 		}
 	}
-
 	/* free resources and close SDL */
 	closeSDL(gWindow, gRenderer);
 
