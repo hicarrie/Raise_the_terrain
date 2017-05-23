@@ -10,17 +10,22 @@ SDL_Point **generate_rows(void)
 	unsigned int x, y, ix, iy;
 	unsigned int i, j;
 	SDL_Point **rows;
-        SDL_Point points[POINTS];
+        SDL_Point *points;
 
-	rows = malloc(sizeof(SDL_Point) * POINTS);
-	if (rows == NULL)
-		return (-1);
 	y = 0;
-	for (i = 0; i < 8; i++)
+	for (i = 0; i < POINTS; i++)
 	{
+		*rows = malloc(sizeof(SDL_Point) * POINTS * POINTS);
+		if (*rows == NULL)
+			return (-1);
+
+		points = malloc(sizeof(SDL_Point) * POINTS);
+		if (points == NULL)
+			return (-1);
+
 		x = SCREEN_WIDTH / 2;
 		y = y + LINE_LENGTH;
-		for (j = 0; j < 8; j++)
+		for (j = 0; j < POINTS; j++)
 		{
 			ix = x - y;
 			iy = INCLINE * x + INCLINE * y;
@@ -29,8 +34,17 @@ SDL_Point **generate_rows(void)
 			x = x + LINE_LENGTH;
 		}
 		rows[i] = points;
-		printf("x: %d\ty: %d\n", rows[i]->x, rows[i]->y);
 	}
+
+	for (i = 0; i < POINTS; i++)
+	{
+		printf("ROW %d\n", i);
+		for (j = 0; j < POINTS; j++)
+		{
+			printf("x: %d\ty: %d\n", rows[i][j].x, rows[i][j].y);
+		}
+	}
+
 	return (*rows);
 }
 

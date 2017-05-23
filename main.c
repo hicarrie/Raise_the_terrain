@@ -80,14 +80,6 @@ int main(int argc, char *argv[])
 		/* event handler */
 		SDL_Event e;
 
-		/* clear screen */
-		SDL_SetRenderDrawColor(gRenderer, 0x31, 0x5D, 0x5F, 0xFF);
-		SDL_RenderClear(gRenderer);
-
-		/* draw lines */
-		SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-		SDL_RenderDrawLines(gRenderer, rows, POINTS);
-
 		/* while application is running */
 		while (!quit)
 		{
@@ -101,6 +93,17 @@ int main(int argc, char *argv[])
 				if (e.type == SDL_KEYDOWN && e.key.keysym.sym
 				    == SDLK_ESCAPE)
 					quit = true;
+			}
+
+			/* clear screen */
+			SDL_SetRenderDrawColor(gRenderer, 0x31, 0x5D, 0x5F, 0xFF);
+			SDL_RenderClear(gRenderer);
+
+			/* draw lines */
+			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+			for (i = 0; i < POINTS; i++)
+			{
+				SDL_RenderDrawLines(gRenderer, rows[i], POINTS);
 			}
 
 			/* update screen */
