@@ -63,11 +63,13 @@ bool init()
  */
 int main(int argc, char *argv[])
 {
-	int i;
+	int i, j;
 	SDL_Point **rows;
+	SDL_Point **cols;
 
-	/* generate points for drawing rows of grid */
+	/* generate points for drawing rows and cols of grid */
 	rows = generate_rows();
+	cols = generate_cols();
 
 	/* start SDL and create window */
 	if (!init())
@@ -103,7 +105,11 @@ int main(int argc, char *argv[])
 			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 			for (i = 0; i < POINTS; i++)
 			{
-				SDL_RenderDrawLines(gRenderer, rows[i], POINTS);
+			        SDL_RenderDrawLines(gRenderer, rows[i], POINTS);
+			}
+			for (i = 0; i < POINTS; i++)
+			{
+			        SDL_RenderDrawLines(gRenderer, cols[i], POINTS);
 			}
 
 			/* update screen */

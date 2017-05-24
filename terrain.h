@@ -10,7 +10,7 @@
 #define SCREEN_HEIGHT 960
 
 #define POINTS 8
-#define LINE_LENGTH 40
+#define LINE_LENGTH 80
 #define INCLINE .4
 
 bool init();
