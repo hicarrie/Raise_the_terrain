@@ -10,12 +10,10 @@ SDL_Renderer *gRenderer = NULL;
  * init - initializes SDL, window, and renderer
  * Return: true on success, false on failure
  */
-bool init()
+bool init(void)
 {
-	/* initialization flag */
 	bool success = true;
 
-	/* initialize SDL */
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		printf("SDL could not initialize! SDL_Error: %s\n",
@@ -24,7 +22,6 @@ bool init()
 	}
 	else
 	{
-		/* create window */
 		gWindow = SDL_CreateWindow("Raise the Terrain",
 					   SDL_WINDOWPOS_UNDEFINED,
 					   SDL_WINDOWPOS_UNDEFINED,
@@ -38,21 +35,21 @@ bool init()
 		}
 		else
 		{
-			/* create renderer for window */
-			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+			gRenderer =
+				SDL_CreateRenderer(gWindow, -1,
+						   SDL_RENDERER_ACCELERATED);
 			if (gRenderer == NULL)
 			{
-				printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+				printf("Renderer could not be created!");
+				printf("SDL Error: %s\n", SDL_GetError());
 				success = false;
 			}
 			else
-			{
-				/* initialize renderer color */
-				SDL_SetRenderDrawColor(gRenderer, 0x2D, 0x4C, 0x76, 0xFF);
-			}
+				SDL_SetRenderDrawColor(gRenderer, 0x2D, 0x4C,
+						       0x76, 0xFF);
 		}
 	}
-	return success;
+	return (success);
 }
 
 /**
@@ -63,32 +60,24 @@ bool init()
  */
 int main(int argc, char *argv[])
 {
-	int i, j;
 	SDL_Point **rows;
 	SDL_Point **cols;
+	int i, j;
 
-	/* generate points for drawing rows and cols of grid */
 	rows = generate_rows();
 	cols = generate_cols();
 
-	/* start SDL and create window */
 	if (!init())
 		printf("Failed to initialize!\n");
 	else
 	{
-		/* main loop flag */
 		bool quit = false;
-
-		/* event handler */
 		SDL_Event e;
 
-		/* while application is running */
 		while (!quit)
 		{
-			/* handle events on queue */
 			while (SDL_PollEvent(&e) != 0)
 			{
-				/* user requests quit */
 				if (e.type == SDL_QUIT)
 					quit = true;
 
@@ -97,28 +86,18 @@ int main(int argc, char *argv[])
 					quit = true;
 			}
 
-			/* clear screen */
 			SDL_SetRenderDrawColor(gRenderer, 0x31, 0x5D, 0x5F, 0xFF);
 			SDL_RenderClear(gRenderer);
 
-			/* draw lines */
 			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 			for (i = 0; i < POINTS; i++)
 			{
-			        SDL_RenderDrawLines(gRenderer, rows[i], POINTS);
+				SDL_RenderDrawLines(gRenderer, rows[i], POINTS);
+				SDL_RenderDrawLines(gRenderer, cols[i], POINTS);
 			}
-			for (i = 0; i < POINTS; i++)
-			{
-			        SDL_RenderDrawLines(gRenderer, cols[i], POINTS);
-			}
-
-			/* update screen */
 			SDL_RenderPresent(gRenderer);
 		}
 	}
-
-	/* free resources and close SDL */
-	closeSDL(gWindow, gRenderer);
-
+	closeSDL(gWindow, gRenderer, rows, cols);
 	return (0);
 }
