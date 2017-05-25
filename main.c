@@ -3,12 +3,12 @@
 /* render window (global) */
 SDL_Window *gWindow = NULL;
 
-/* window renderer */
+/* window renderer (global) */
 SDL_Renderer *gRenderer = NULL;
 
 /**
  * init - initializes SDL, window, and renderer
- * Return: true on success, false on failure
+ * Return: True on success, False on failure
  */
 bool init(void)
 {
@@ -76,16 +76,17 @@ int main(int argc, char *argv[])
 
 		while (!quit)
 		{
-			while (SDL_PollEvent(&e) != 0)
+			while (SDL_PollEvent(&event) != 0)
 			{
-				if (e.type == SDL_QUIT)
+				/* user requests quit */
+				if (event.type == SDL_QUIT)
 					quit = true;
 
-				if (e.type == SDL_KEYDOWN && e.key.keysym.sym
-				    == SDLK_ESCAPE)
+				if (event.type == SDL_KEYDOWN &&
+				    event.key.keysym.sym == SDLK_ESCAPE)
 					quit = true;
 			}
-
+      
 			SDL_SetRenderDrawColor(gRenderer, 0x31, 0x5D, 0x5F, 0xFF);
 			SDL_RenderClear(gRenderer);
 
